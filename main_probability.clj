@@ -25,15 +25,7 @@
       (dealer-starts-with faced-up wins (+ fails 1) (- acc 1))) ;; dealer fails
     (float (/ wins (+ wins fails)))))
 
-;; C-like for macro
-(defmacro for-loop [[sym init check change :as params] & steps]
- `(loop [~sym ~init value# nil]
-    (if ~check
-      (let [new-value# (do ~@steps)]
-        (recur ~change new-value#))
-      value#)))
 
-(for-loop [i 2 (<= i 12) (inc i)]
-    (println
-     (str "Faced up card is ", i, " : ",
-          (format "so %.1f%%" (* (dealer-starts-with i 0 0 1000) 100)))))
+(map #(println (str "Faced up with " (:id %) " : " (:value %)))
+     (map #(assoc {} :id % :value (* 100 (dealer-starts-with % 0 0 1000)))
+       (take 10 (range))))
