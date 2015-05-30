@@ -13,20 +13,20 @@
 
 (defn dealer-plays
   "Simulate dealer's game when he hits another card"
-  [sum]
+  [& {:keys [sum]}]
   (cond (> sum 21) false ;; it is fail
         (> sum 17) true  ;; deals doesn't have to hit
-        :else (dealer-plays (+ sum
-                               (let [r (rcard)]  ;; ace cand be both 11 and 1
-                                 (if (and (= r 11) (> sum 10)) 1 r))))))
+        :else (dealer-plays :sum (+ sum
+                                  (let [r (rcard)]  ;; ace cand be both 11 and 1
+                                    (if (and (= r 11) (> sum 10)) 1 r))))))
 
 (defn dealer-starts-with
   "Simulate dealer's game for [acc] times"
-  [faced-up wins fails acc]
+  [& {:keys [faced-up wins fails acc]}]
   (if (> acc 1)
-    (if (dealer-plays faced-up)
-      (dealer-starts-with faced-up (+ wins 1) fails (- acc 1))  ;; dealer wins
-      (dealer-starts-with faced-up wins (+ fails 1) (- acc 1))) ;; dealer fails
+    (if (dealer-plays :sum faced-up)
+      (dealer-starts-with :faced-up faced-up, :wins (+ wins 1), :fails fails,       :acc (- acc 1))  ;; dealer wins
+      (dealer-starts-with :faced-up faced-up, :wins wins,       :fails (+ fails 1), :acc (- acc 1))) ;; dealer fails
     (float (/ wins (+ wins fails)))))
 
 ;; !I/O part
@@ -39,7 +39,7 @@
 (defn give-statistics
   "Gather information from dealer-starts-with for i'th card"
   [i]
-  (map-to-vec (assoc {} :id i :value (* 100 (dealer-starts-with i 0 0 1000)))))
+  (map-to-vec (assoc {} :id i :value (* 100 (dealer-starts-with :faced-up i, :wins 0, :fails 0, :acc 1000)))))
 
 ;; !Helpers' part
 
