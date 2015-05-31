@@ -55,7 +55,8 @@
 (defn map-to-vec
   "Converts map to vector"
   [arg]
-  (apply wide-into (map identity arg)))
+  (apply into `(~@arg))) ;; using Clojure
+  ;;(apply wide-into (map identity arg))) ;; using wide-into
 
 ;; !Main part
 
