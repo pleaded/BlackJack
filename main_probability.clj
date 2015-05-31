@@ -41,14 +41,16 @@
   [i]
   (map-to-vec (assoc {} :id i :value (* 100 (dealer-starts-with :faced-up i, :wins 0, :fails 0, :acc 1000)))))
 
+(give-statistics 2)
 ;; !Helpers' part
 
 (defn wide-into
-  "Into macro for variety of args"
-  ([a b]
-   (into a b))
+  ([a] a)
+  ([a b] (into a b))
   ([a b & args]
-   (into a (apply wide-into b args))))
+    (if-not (next args)
+      (into a (apply into b args))
+      (recur (into a b) (first args) (rest args)))))
 
 (defn map-to-vec
   "Converts map to vector"
