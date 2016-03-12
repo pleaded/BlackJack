@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <ostream>
+#include <stdio.h>
 
 using std::cin;
 using std::cout;
